@@ -45,7 +45,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "SELECT * FROM @{item().schema}.@{item().table} WHERE @{item().cdc_col} > '@{if(empty(item().from_date),activity('LastCDC').output.value[0].cdc,item().from_date)}'",
+										"value": "SELECT *\nFROM @{item().schema}.@{item().table}\nWHERE @{item().cdc_col} >\nCAST(\n  '@{coalesce(activity('LastCDC').output.value[0].cdc, '1900-01-01T00:00:00Z')}'\n  AS DATETIME\n)\n",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
